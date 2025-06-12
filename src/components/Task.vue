@@ -15,8 +15,15 @@
         </ul>
       </nav>
     </header>
-    <label>Task: </label>
-    <input type ="text" id="utask" placeholder="Enter your task">
+    <label>Give your task: </label>
+    <input
+    type="text"
+    v-model="utask"
+    placeholder="Enter your task"
+    label="Enter your task" 
+    id="utask"
+    >
+    <br>
     <button @click = "submitBtn()">Submit</button>
     <ul id="dTask"></ul>
     <br>
@@ -29,18 +36,20 @@
     <br>
     <label>Delete by name: </label>
     <input type="text" id="deleteValue" placeholder="Delete by name">
-    <v-btn @click = "deleteBtn()">Delete</v-btn>
+    <ButtonUI @click="deleteBtn()" label="Delete" />
     <p id="confirm" v-show = "confirmation">{{ delconfmsg }}</p>
     <footer>Done by MITWORK 2025</footer>
   </div>
 </template>
 
 <script>
-import VBtn from 'vuetify/lib/components/VBtn';
+import ButtonUI from './ButtonUI.vue'; 
+
 export default {
   components: {
-        VBtn,
+      ButtonUI,
     },
+
   name: 'Task',
   props: {
     msg: String
@@ -93,7 +102,8 @@ export default {
         }
 
     },
-    deleteBtn() {
+    deleteBtn(msg) {
+      console.log('Delete button clicked', msg);
         const deleteValue = document.getElementById('deleteValue').value.toLowerCase();
         this.taskList = document.getElementById('dTask');
         const tasks = JSON.parse(localStorage.getItem('taskData')) || [];
