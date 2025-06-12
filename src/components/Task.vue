@@ -29,17 +29,18 @@
     <br>
     <label>Delete by name: </label>
     <input type="text" id="deleteValue" placeholder="Delete by name">
-    <button @click = "deleteBtn()">Delete</button>
+    <v-btn @click = "deleteBtn()">Delete</v-btn>
     <p id="confirm" v-show = "confirmation">{{ delconfmsg }}</p>
     <footer>Done by MITWORK 2025</footer>
   </div>
 </template>
 
 <script>
+import VBtn from 'vuetify/lib/components/VBtn';
 export default {
-  // components: {
-  //       VBtn,
-  //   },
+  components: {
+        VBtn,
+    },
   name: 'Task',
   props: {
     msg: String
