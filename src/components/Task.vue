@@ -16,27 +16,21 @@
       </nav>
     </header>
     <label>Give your task: </label>
-    <input
-    type="text"
-    v-model="utask"
-    placeholder="Enter your task"
-    label="Enter your task" 
-    id="utask"
-    >
+    <InputUI v-model="utask" label="Enter your task" id="utask" size="m" variant="main"/>
     <br>
-    <button @click = "submitBtn()">Submit</button>
+    <ButtonUI @klick = "submitBtn()" label = "Submit" class="main-var"/>
     <ul id="dTask"></ul>
     <br>
     <h3>Filter and Delete Tasks</h3>
     <br>
     <label>Filter by name: </label>
-    <input type="text" id="filterValue" placeholder="Filter by name">
-    <button @click = "filterBtn()">Filter</button>
+    <InputUI v-model="filterValue" label="Filter by name" id="filterValue" size="s" variant="main"/>
+    <ButtonUI @klick = "filterBtn()" label = "Filter" class="main-var"/>
     <br>
     <br>
     <label>Delete by name: </label>
-    <input type="text" id="deleteValue" placeholder="Delete by name">
-    <ButtonUI @click="deleteBtn()" label="Delete" />
+    <InputUI v-model="deleteValue" label="Delete by name" id="deleteValue" size="s" variant="main"/>
+    <ButtonUI @klick="deleteBtn()" label="Delete" class="main-var" />
     <p id="confirm" v-show = "confirmation">{{ delconfmsg }}</p>
     <footer>Done by MITWORK 2025</footer>
   </div>
@@ -44,10 +38,12 @@
 
 <script>
 import ButtonUI from './ButtonUI.vue'; 
+import InputUI from './InputUI.vue';
 
 export default {
   components: {
       ButtonUI,
+      InputUI
     },
 
   name: 'Task',
@@ -102,8 +98,8 @@ export default {
         }
 
     },
-    deleteBtn(msg) {
-      console.log('Delete button clicked', msg);
+    deleteBtn() {
+      console.log('Delete button clicked');
         const deleteValue = document.getElementById('deleteValue').value.toLowerCase();
         this.taskList = document.getElementById('dTask');
         const tasks = JSON.parse(localStorage.getItem('taskData')) || [];
