@@ -19,7 +19,22 @@
     <InputUI v-model="utask" label="Enter your task" id="utask" size="m" variant="main"/>
     <br>
     <ButtonUI @klick = "submitBtn()" label = "Submit" class="main-var"/>
-    <ul id="dTask"></ul>
+   <br>
+   <br>
+    <table>
+    <tr>
+        <th>Task</th>
+        <th>Options</th>
+      </tr>
+   </table>
+    <table id="dTask">
+    </table>
+    <table>
+      <tr>
+        <th>Task count</th>
+        <th></th>
+      </tr>
+    </table>
     <br>
     <h3>Filter and Delete Tasks</h3>
     <br>
@@ -62,62 +77,98 @@ export default {
         };
     },
 
-  methods: {
-    submitBtn () {
-        const taskInput = document.getElementById('utask').value.trim();
-        if (taskInput){
-            this.taskData.push(taskInput);
-            localStorage.setItem('taskData', JSON.stringify(this.taskData));
-            this.displayTasks();
-        }
-    },
-    displayTasks() {
-       const taskList = document.getElementById('dTask');
-       const tasks = JSON.parse(localStorage.getItem('taskData')) || [];
-         taskList.innerHTML = '';
-       tasks.forEach(task => {
-           const li = document.createElement('li');
-           li.textContent = task;
-           taskList.appendChild(li);
-       });
-         this.taskData = tasks; 
-    },
-    filterBtn() {
-        const filterValue = document.getElementById('filterValue').value.toLowerCase();
-        const taskList = document.getElementById('dTask');
-        taskList.innerHTML = ''; 
-        this.taskData.forEach(task => {
-            if (task.toLowerCase().includes(filterValue)) {
-                const li = document.createElement('li');
-                li.textContent = task;
-                taskList.appendChild(li);
-            }
-        });
-        if (taskList.children.length === 0) {
-            taskList.innerHTML = '<li>No tasks found</li>';
-        }
-
-    },
-    deleteBtn() {
-      console.log('Delete button clicked');
-        const deleteValue = document.getElementById('deleteValue').value.toLowerCase();
-        this.taskList = document.getElementById('dTask');
-        const tasks = JSON.parse(localStorage.getItem('taskData')) || [];
-        const filteredTasks = tasks.filter(task => !task.toLowerCase().includes(deleteValue));
-        
-        if (tasks.length === filteredTasks.length) {
-            this.delconfmsg = 'No tasks found to delete';
-            this.confirmation = true;
-            return;
-        }
-        
-        localStorage.setItem('taskData', JSON.stringify(filteredTasks));
-        this.taskData = filteredTasks;
-        this.displayTasks();
-        this.delconfmsg = 'Task deleted successfully';
-        this.confirmation = true;
-    },
+methods: {
+  submitBtn () {
+      const taskInput = document.getElementById('utask').value.trim();
+      if (taskInput){
+          this.taskData.push(taskInput);
+          localStorage.setItem('taskData', JSON.stringify(this.taskData));
+          this.displayTasks();
+      }
   },
+
+  displayTasks() {
+     const taskList = document.getElementById('dTask');
+     const tasks = JSON.parse(localStorage.getItem('taskData')) || [];
+     taskList.innerHTML = '';
+
+     tasks.forEach((task, index) => {
+         const tr = document.createElement('tr');
+
+         const tdTask = document.createElement('td');
+         tdTask.textContent = task;
+         tr.appendChild(tdTask);
+
+         const tdDelete = document.createElement('td');
+         const deleteBtn = document.createElement('button');
+         deleteBtn.textContent = 'Delete';
+         deleteBtn.classList.add('delete-btn');
+         deleteBtn.addEventListener('click', () => this.deleteTask(index));
+         tdDelete.appendChild(deleteBtn);
+         tr.appendChild(tdDelete);
+
+         taskList.appendChild(tr);
+     });
+
+     this.taskData = tasks; 
+  },
+
+  deleteTask(index) {
+    this.taskData.splice(index, 1);
+    localStorage.setItem('taskData', JSON.stringify(this.taskData));
+    this.displayTasks();
+    this.delconfmsg = 'Task deleted successfully';
+    this.confirmation = true;
+  },
+
+  filterBtn() {
+      const filterValue = document.getElementById('filterValue').value.toLowerCase();
+      const taskList = document.getElementById('dTask');
+      taskList.innerHTML = ''; 
+      this.taskData.forEach((task, index) => {
+          if (task.toLowerCase().includes(filterValue)) {
+              const tr = document.createElement('tr');
+
+              const tdTask = document.createElement('td');
+              tdTask.textContent = task;
+              tr.appendChild(tdTask);
+
+              const tdDelete = document.createElement('td');
+              const deleteBtn = document.createElement('button');
+              deleteBtn.textContent = 'Delete';
+              deleteBtn.classList.add('delete-btn');
+              deleteBtn.addEventListener('click', () => this.deleteTask(index));
+              tdDelete.appendChild(deleteBtn);
+              tr.appendChild(tdDelete);
+
+              taskList.appendChild(tr);
+          }
+      });
+
+      if (taskList.children.length === 0) {
+          taskList.innerHTML = '<tr><td colspan="2">No tasks found</td></tr>';
+      }
+  },
+
+  deleteBtn() {
+      const deleteValue = document.getElementById('deleteValue').value.toLowerCase();
+      const tasks = JSON.parse(localStorage.getItem('taskData')) || [];
+      const filteredTasks = tasks.filter(task => !task.toLowerCase().includes(deleteValue));
+      
+      if (tasks.length === filteredTasks.length) {
+          this.delconfmsg = 'No tasks found to delete';
+          this.confirmation = true;
+          return;
+      }
+      
+      localStorage.setItem('taskData', JSON.stringify(filteredTasks));
+      this.taskData = filteredTasks;
+      this.displayTasks();
+      this.delconfmsg = 'Task deleted successfully';
+      this.confirmation = true;
+  },
+},
+
   mounted() {
     const storedTasks = localStorage.getItem('taskData');
     if (storedTasks) {
@@ -165,12 +216,25 @@ input{
     border-color: #004589;
     border-style: solid;
     border-width: 1px;
-    margin-right: 30%;
-    margin-left: 30%;
-    width: 40%;
+    margin-right: 10%;
+    margin-left: 10%;
+    width: 80%;
     padding: 10px;
-    border-radius: 10px;
     transition: background-color 0.3s;
+}
+table{
+  border-color: #004589;
+    border-style: solid;
+    border-width: 1px;
+    margin-right: 10%;
+    margin-left: 10%;
+    width: 80%;
+    padding: 10px;
+    transition: background-color 0.3s;
+}
+table tr th {
+  padding: 10px;
+
 }
 footer {
     margin-top: 20%;
