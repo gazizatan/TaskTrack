@@ -1,20 +1,35 @@
 <template>
-  <input
-    :title="input"
-    :aria-label="input"
-    type="text"
-    v-model="inputText"
+  <!-- <input
+    :title="value"
+    :aria-label="value"
+    type="" 
+    v-model="value"
+    :value = "value"
     :class="['input-ui', variantClass, sizeClass, { 'input-error': isError }]"
     @blur="validateInput"
     @keyup.enter="handleSubmit"
+    
+  > -->
+  <input
+    :title="value"
+    :aria-label="value"
+    :placeholder="value"
+    type="" 
+    :value = "value"
+    :class="['input-ui', variantClass, sizeClass, { 'input-error': isError }]"
+    @blur="validateInput"
+    @keyup.enter="handleSubmit"
+    @input = "$emit('update:value',$event.target.value)"
   >
+  <!-- тайп универсальный, placeholder, :value vs v-model, how it works, @input-->
 </template>
 
 <script>
+/* eslint-disable */
 export default {
   name: 'InputUI',
   props: {
-    input: {
+    value: {
       type: String,
       default: ''
     },
@@ -26,41 +41,36 @@ export default {
     variant: {
       type: String,
       default: 'main'
+    },
+    type:{
+      type: String,
+      default: 'text'
     }
   },
   data() {
     return {
-      inputText: '',
       isError: false
     };
   },
   computed: {
     variantClass() {
-      return `input-ui.${this.variant}-varik`;
+      return `input-ui-${this.variant}-varik`
     },
     sizeClass() {
       return `input-size-${this.size}`;
     }
   },
-  mounted() {
-    this.inputText = this.input;
-  },
   methods: {
     handleSubmit() {
       this.validateInput();
       if (!this.isError) {
-        this.$emit('submit', this.inputText);
+        this.$emit('submit', this.value);
       }
     },
     validateInput() {
-      this.isError = this.inputText.trim() === '';
+      this.isError = this.value.trim() === '';
     }
   },
-  watch: {
-    input(newInput) {
-      this.inputText = newInput;
-    }
-  }
 };
 </script>
 
@@ -72,18 +82,18 @@ export default {
   transition: border-color 0.3s, background-color 0.3s;
 }
 
-.input-ui.main-varik {
+.input-ui-main-varik {
   background-color: #c5eefc;
   color: #333;
 }
-.input-ui.second-varik {
+.input-ui-second-varik {
   background-color: #e0e0e0;
   color: #666;
 }
-.input-ui.main-varik:hover {
+.input-ui-main-varik:hover {
   background-color: #d0d0d0;
 }
-.input-ui.second-varik:hover {
+.input-ui-second-varik:hover {
   background-color: #c0c0c0;
 }
 

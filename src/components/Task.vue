@@ -18,9 +18,10 @@
     <label>Give your task: </label>
     <InputUI v-model="utask" label="Enter your task" id="utask" size="m" variant="main"/>
     <br>
-    <ButtonUI @klick = "submitBtn()" label = "Submit" class="main-var"/>
+    <ButtonUI @сlick = "submitBtn()" label = "Submit" class="main-var" size="m"/>
    <br>
    <br>
+       <p id="confirm" v-show = "confirmation">{{ delconfmsg }}</p>
     <table>
     <tr>
         <th>Task</th>
@@ -32,28 +33,25 @@
     <table>
       <tr>
         <th>Task count</th>
-        <th></th>
+        <th> {{ taskCount }}</th>
       </tr>
     </table>
     <br>
     <h3>Filter and Delete Tasks</h3>
     <br>
     <label>Filter by name: </label>
-    <InputUI v-model="filterValue" label="Filter by name" id="filterValue" size="s" variant="main"/>
-    <ButtonUI @klick = "filterBtn()" label = "Filter" class="main-var"/>
+    <InputUI v-model="filterValue" label="Filter by name" id="filterValue" size="m" variant="main" type="checkbox"/>
+    <ButtonUI @сlick="filterBtn()" label="Filter" class="main-var"/>
     <br>
     <br>
-    <label>Delete by name: </label>
-    <InputUI v-model="deleteValue" label="Delete by name" id="deleteValue" size="s" variant="main"/>
-    <ButtonUI @klick="deleteBtn()" label="Delete" class="main-var" />
-    <p id="confirm" v-show = "confirmation">{{ delconfmsg }}</p>
     <footer>Done by MITWORK 2025</footer>
   </div>
 </template>
 
 <script>
-import ButtonUI from './ButtonUI.vue'; 
-import InputUI from './InputUI.vue';
+/* eslint-disable */
+import ButtonUI from './comps/ButtonUI.vue'
+import InputUI from './comps/InputUI.vue'
 
 export default {
   components: {
@@ -73,8 +71,13 @@ export default {
             filterValue: '',
             deleteValue: '',
             confirmation: false,
-
+            count: 0
         };
+    },
+    computed: {
+      taskCount() {
+        return this.taskData.length
+      }
     },
 
 methods: {
@@ -84,6 +87,9 @@ methods: {
           this.taskData.push(taskInput);
           localStorage.setItem('taskData', JSON.stringify(this.taskData));
           this.displayTasks();
+          setTimeout(() => {
+             loader.style.display = 'none';
+          }, 2000);
       }
   },
 
@@ -175,6 +181,8 @@ methods: {
       this.taskData = JSON.parse(storedTasks);
       this.displayTasks();
     }
+    
+    
   },
 };
 </script>

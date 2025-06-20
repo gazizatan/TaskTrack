@@ -5,6 +5,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import Task from './components/Task.vue'
 
 export default {

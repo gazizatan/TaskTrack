@@ -1,19 +1,24 @@
+
 <template>
   <button 
     :title="label"
     :aria-label="label"
     @click="handleClick"
     :disabled="loading"
-    :class="['button-ui', variantClass, { 'button-loading': loading }]"
+    :class="['button-ui', variantClass, { 'button-loading': loading }, sizeClass]"
     :style="{ fontSize: buttonSize }"
   >
-    <span v-if="loading" class="spinner"></span>
-    <span v-else-if="buttonText">{{ buttonText }}</span>
-    <span v-else>{{ label }}</span>
+    <div v-if="loading" class="loader"></div>
+    <template v-else>
+      <slot name="icon"></slot>
+      <slot>{{ label }}</slot>
+    </template>
+<!-- slot написать , в котором можно иконки добавить, тайп баттон, сайз как в инпуте, loader проверить-->
   </button>
 </template>
 
 <script>
+/* eslint-disable */
 export default {
   name: 'ButtonUI',
   props: {
@@ -23,7 +28,8 @@ export default {
     },
     size: {
       type: String,
-      default: '20px'
+      default: 'm',
+      validator: value => ['s', 'm', 'l', 'xl'].includes(value)
     },
     variant: {
       type: String,
@@ -36,39 +42,42 @@ export default {
   },
   data() {
     return {
-      buttonText: '',
-      buttonSize: '',
-    };
+      isLoading: this.loading
+    }
+  },
+  watch: {
+    loading(newValue) {
+      this.isLoading = newValue
+    }
   },
   computed: {
     variantClass() {
       return `${this.variant}-var`;
+    },
+    sizeClass() {
+      return `input-size-${this.size}`;
     }
-  },
-  mounted() {
-    this.buttonText = this.label;
-    this.buttonSize = this.size;
   },
 
   methods: {
     handleClick() {
       if (!this.loading) {
-        this.$emit('klick'); 
+        this.$emit('сlick'); 
       }
     }
   },
-  watch: {
-    label(newLabel) {
-      this.buttonText = newLabel;
-    },
-    size(newSize) {
-      this.buttonSize = newSize;
-    }
-  }
 };
 </script>
 
 <style scoped>
+.loader {
+  border: 5px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 5px solid #3498db;
+  width: 20px;
+  height: 20px;
+  animation: spin 2s linear infinite;
+}
 .button-ui {
   font-family: 'Arial', sans-serif;
   border-radius: 10px;
@@ -107,7 +116,7 @@ export default {
   background-color: #b0b0b0;
 }
 
-.spinner {
+.loader {
   border: 3px solid rgba(255, 255, 255, 0.3);
   border-top: 3px solid #ffffff;
   border-radius: 50%;
@@ -115,6 +124,23 @@ export default {
   height: 18px;
   animation: spin 0.8s linear infinite;
   box-sizing: border-box;
+}
+
+.input-size-s {
+  font-size: 12px;
+  padding: 6px;
+}
+.input-size-m {
+  font-size: 14px;
+  padding: 8px;
+}
+.input-size-l {
+  font-size: 16px;
+  padding: 10px;
+}
+.input-size-xl {
+  font-size: 18px;
+  padding: 12px;
 }
 
 @keyframes spin {
