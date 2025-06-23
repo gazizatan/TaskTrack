@@ -1,4 +1,3 @@
-
 <template>
   <button 
     :title="label"
@@ -6,19 +5,17 @@
     @click="handleClick"
     :disabled="loading"
     :class="['button-ui', variantClass, { 'button-loading': loading }, sizeClass]"
-    :style="{ fontSize: buttonSize }"
+    :type="type"
   >
     <div v-if="loading" class="loader"></div>
     <template v-else>
       <slot name="icon"></slot>
       <slot>{{ label }}</slot>
     </template>
-<!-- slot написать , в котором можно иконки добавить, тайп баттон, сайз как в инпуте, loader проверить-->
   </button>
 </template>
 
 <script>
-/* eslint-disable */
 export default {
   name: 'ButtonUI',
   props: {
@@ -38,16 +35,11 @@ export default {
     loading: {
       type: Boolean,
       default: false
-    }
-  },
-  data() {
-    return {
-      isLoading: this.loading
-    }
-  },
-  watch: {
-    loading(newValue) {
-      this.isLoading = newValue
+    },
+    type: {
+      type: String,
+      default: 'button',
+      validator: value => ['button', 'submit', 'reset'].includes(value)
     }
   },
   computed: {
@@ -58,26 +50,17 @@ export default {
       return `input-size-${this.size}`;
     }
   },
-
   methods: {
     handleClick() {
       if (!this.loading) {
-        this.$emit('сlick'); 
+        this.$emit('click'); 
       }
     }
-  },
+  }
 };
 </script>
 
 <style scoped>
-.loader {
-  border: 5px solid #f3f3f3;
-  border-radius: 50%;
-  border-top: 5px solid #3498db;
-  width: 20px;
-  height: 20px;
-  animation: spin 2s linear infinite;
-}
 .button-ui {
   font-family: 'Arial', sans-serif;
   border-radius: 10px;
@@ -87,6 +70,7 @@ export default {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 8px; 
 }
 
 .button-ui:disabled {
@@ -128,19 +112,19 @@ export default {
 
 .input-size-s {
   font-size: 12px;
-  padding: 6px;
+  padding: 6px 12px;
 }
 .input-size-m {
   font-size: 14px;
-  padding: 8px;
+  padding: 8px 16px;
 }
 .input-size-l {
   font-size: 16px;
-  padding: 10px;
+  padding: 10px 20px;
 }
 .input-size-xl {
   font-size: 18px;
-  padding: 12px;
+  padding: 12px 24px;
 }
 
 @keyframes spin {

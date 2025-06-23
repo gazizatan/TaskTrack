@@ -1,35 +1,30 @@
 <template>
-  <!-- <input
-    :title="value"
-    :aria-label="value"
-    type="" 
-    v-model="value"
-    :value = "value"
-    :class="['input-ui', variantClass, sizeClass, { 'input-error': isError }]"
-    @blur="validateInput"
-    @keyup.enter="handleSubmit"
-    
-  > -->
   <input
-    :title="value"
-    :aria-label="value"
-    :placeholder="value"
-    type="" 
-    :value = "value"
+    :title="label || placeholder"
+    :aria-label="label || placeholder"
+    :placeholder="placeholder"
+    :type="type"
+    :value="modelValue"
     :class="['input-ui', variantClass, sizeClass, { 'input-error': isError }]"
     @blur="validateInput"
     @keyup.enter="handleSubmit"
-    @input = "$emit('update:value',$event.target.value)"
+    @input="$emit('update:modelValue', $event.target.value)"
   >
-  <!-- тайп универсальный, placeholder, :value vs v-model, how it works, @input-->
 </template>
 
 <script>
-/* eslint-disable */
 export default {
   name: 'InputUI',
   props: {
-    value: {
+    modelValue: {  
+      type: String,
+      default: ''
+    },
+    label: {      
+      type: String,
+      default: ''
+    },
+    placeholder: { 
       type: String,
       default: ''
     },
@@ -40,11 +35,17 @@ export default {
     },
     variant: {
       type: String,
-      default: 'main'
+      default: 'main',
+      validator: value => ['main', 'second'].includes(value)
     },
-    type:{
+    type: {
       type: String,
-      default: 'text'
+      default: 'text',
+      validator: value => ['text', 'password', 'email', 'number', 'search'].includes(value)
+    },
+    required: {    
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -54,7 +55,7 @@ export default {
   },
   computed: {
     variantClass() {
-      return `input-ui-${this.variant}-varik`
+      return `input-ui-${this.variant}-var`;
     },
     sizeClass() {
       return `input-size-${this.size}`;
@@ -64,57 +65,74 @@ export default {
     handleSubmit() {
       this.validateInput();
       if (!this.isError) {
-        this.$emit('submit', this.value);
+        this.$emit('submit', this.modelValue);
       }
     },
     validateInput() {
-      this.isError = this.value.trim() === '';
+      this.isError = this.required && this.modelValue.trim() === '';
     }
-  },
+  }
 };
 </script>
 
-<style>
+<style scoped>
 .input-ui {
   border: 1px solid #ccc;
   border-radius: 4px;
-  width: 90%;
-  transition: border-color 0.3s, background-color 0.3s;
+  width: 100%;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  outline: none;
 }
 
-.input-ui-main-varik {
+.input-ui:focus {
+  border-color: #4d90fe;
+  box-shadow: 0 0 5px rgba(77, 144, 254, 0.5);
+}
+
+.input-ui-main-var {
   background-color: #c5eefc;
   color: #333;
 }
-.input-ui-second-varik {
+
+.input-ui-second-var {
   background-color: #e0e0e0;
   color: #666;
 }
-.input-ui-main-varik:hover {
-  background-color: #d0d0d0;
+
+.input-ui-main-var:hover {
+  background-color: #b0e0f0;
 }
-.input-ui-second-varik:hover {
-  background-color: #c0c0c0;
+
+.input-ui-second-var:hover {
+  background-color: #d0d0d0;
 }
 
 .input-error {
-  border-color: red !important;
+  border-color: #e74c3c !important;
+  background-color: #ffebee;
 }
 
 .input-size-s {
   font-size: 12px;
-  padding: 6px;
+  padding: 6px 8px;
+  height: 28px;
 }
+
 .input-size-m {
   font-size: 14px;
-  padding: 8px;
+  padding: 8px 12px;
+  height: 32px;
 }
+
 .input-size-l {
   font-size: 16px;
-  padding: 10px;
+  padding: 10px 14px;
+  height: 36px;
 }
+
 .input-size-xl {
   font-size: 18px;
-  padding: 12px;
+  padding: 12px 16px;
+  height: 40px;
 }
 </style>

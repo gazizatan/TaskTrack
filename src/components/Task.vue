@@ -18,7 +18,7 @@
     <label>Give your task: </label>
     <InputUI v-model="utask" label="Enter your task" id="utask" size="m" variant="main"/>
     <br>
-    <ButtonUI @сlick = "submitBtn()" label = "Submit" class="main-var" size="m"/>
+    <ButtonUI @сlick = "submitBtn()" label = "Submit" class="main-var" size="m" :loading="loading" />
    <br>
    <br>
        <p id="confirm" v-show = "confirmation">{{ delconfmsg }}</p>
@@ -40,7 +40,7 @@
     <h3>Filter and Delete Tasks</h3>
     <br>
     <label>Filter by name: </label>
-    <InputUI v-model="filterValue" label="Filter by name" id="filterValue" size="m" variant="main" type="checkbox"/>
+    <InputUI v-model="filterValue" label="Filter by name" id="filterValue" size="m" variant="main" type="text"/>
     <ButtonUI @сlick="filterBtn()" label="Filter" class="main-var"/>
     <br>
     <br>
@@ -71,7 +71,8 @@ export default {
             filterValue: '',
             deleteValue: '',
             confirmation: false,
-            count: 0
+            count: 0,
+            loading: false,
         };
     },
     computed: {
@@ -83,13 +84,14 @@ export default {
 methods: {
   submitBtn () {
       const taskInput = document.getElementById('utask').value.trim();
+      setTimeout(() => {
+            this.loading = true;
+            this.delconfmsg = 'Task added successfully';
+          }, 1000);
       if (taskInput){
           this.taskData.push(taskInput);
           localStorage.setItem('taskData', JSON.stringify(this.taskData));
           this.displayTasks();
-          setTimeout(() => {
-             loader.style.display = 'none';
-          }, 2000);
       }
   },
 
