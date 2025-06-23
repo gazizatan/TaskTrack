@@ -2,7 +2,7 @@
   <button 
     :title="label"
     :aria-label="label"
-    @click="handleClick"
+    @click="handleClick()"
     :disabled="loading"
     :class="['button-ui', variantClass, { 'button-loading': loading }, sizeClass]"
     :type="type"

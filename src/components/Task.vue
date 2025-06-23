@@ -18,7 +18,7 @@
     <label>Give your task: </label>
     <InputUI v-model="utask" label="Enter your task" id="utask" size="m" variant="main"/>
     <br>
-    <ButtonUI @сlick = "submitBtn()" label = "Submit" class="main-var" size="m" :loading="loading" />
+    <ButtonUI @click = "submitBtn()" label = "Submit" class="main-var" size="m" :loading="loading" />
    <br>
    <br>
        <p id="confirm" v-show = "confirmation">{{ delconfmsg }}</p>
@@ -41,7 +41,7 @@
     <br>
     <label>Filter by name: </label>
     <InputUI v-model="filterValue" label="Filter by name" id="filterValue" size="m" variant="main" type="text"/>
-    <ButtonUI @сlick="filterBtn()" label="Filter" class="main-var"/>
+    <ButtonUI @click="filterBtn()" label="Filter" class="main-var"/>
     <br>
     <br>
     <footer>Done by MITWORK 2025</footer>
@@ -108,9 +108,9 @@ methods: {
          tr.appendChild(tdTask);
 
          const tdDelete = document.createElement('td');
-         const deleteBtn = document.createElement('button');
+         const deleteBtn = document.createElement('ButtonUI');
          deleteBtn.textContent = 'Delete';
-         deleteBtn.classList.add('delete-btn');
+         deleteBtn.classList.add('main-var');
          deleteBtn.addEventListener('click', () => this.deleteTask(index));
          tdDelete.appendChild(deleteBtn);
          tr.appendChild(tdDelete);
@@ -142,9 +142,9 @@ methods: {
               tr.appendChild(tdTask);
 
               const tdDelete = document.createElement('td');
-              const deleteBtn = document.createElement('button');
+              const deleteBtn = document.createElement('ButtonUI');
               deleteBtn.textContent = 'Delete';
-              deleteBtn.classList.add('delete-btn');
+              deleteBtn.classList.add('main-var');
               deleteBtn.addEventListener('click', () => this.deleteTask(index));
               tdDelete.appendChild(deleteBtn);
               tr.appendChild(tdDelete);
