@@ -52,11 +52,13 @@
 /* eslint-disable */
 import ButtonUI from './comps/ButtonUI.vue'
 import InputUI from './comps/InputUI.vue'
+import ViewUI from './comps/ViewUI.vue';
 
 export default {
   components: {
       ButtonUI,
-      InputUI
+      InputUI, 
+      ViewUI
     },
 
   name: 'Task',
@@ -109,11 +111,19 @@ methods: {
 
          const tdDelete = document.createElement('td');
          const deleteBtn = document.createElement('ButtonUI');
+         const detailBtn = document.createElement('ButtonUI');
          deleteBtn.textContent = 'Delete';
          deleteBtn.classList.add('main-var');
          deleteBtn.addEventListener('click', () => this.deleteTask(index));
          tdDelete.appendChild(deleteBtn);
          tr.appendChild(tdDelete);
+
+         const tdDetail = document.createElement('td');
+         detailBtn.textContent = 'View';
+         detailBtn.classList.add('main-var');
+         detailBtn.addEventListener('click', () => this.viewTask(index));
+         tdDetail.appendChild(detailBtn);
+         tr.appendChild(tdDetail);
 
          taskList.appendChild(tr);
      });
@@ -143,11 +153,18 @@ methods: {
 
               const tdDelete = document.createElement('td');
               const deleteBtn = document.createElement('ButtonUI');
+              const detailBtn = document.createElement('ButtonUI');
               deleteBtn.textContent = 'Delete';
               deleteBtn.classList.add('main-var');
               deleteBtn.addEventListener('click', () => this.deleteTask(index));
               tdDelete.appendChild(deleteBtn);
               tr.appendChild(tdDelete);
+
+              detailBtn.textContent = 'View';
+              detailBtn.classList.add('main-var');
+              detailBtn.addEventListener('click', () => this.viewTask(task));
+              tdDetail.appendChild(detailBtn);
+              tdDetail.appendChild(tdEdit);
 
               taskList.appendChild(tr);
           }
@@ -175,6 +192,12 @@ methods: {
       this.delconfmsg = 'Task deleted successfully';
       this.confirmation = true;
   },
+},
+
+detailBtn() {
+    const details = document.getElementById('details');
+    details.style.display = 'block';
+    // TODO: Implement the details popup with the task details open ViewUI component  
 },
 
   mounted() {
