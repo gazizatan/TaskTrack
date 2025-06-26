@@ -4,46 +4,46 @@
     :aria-label="label || placeholder"
     :placeholder="placeholder"
     :type="type"
-    :value="modelValue"
+    :value="value"
     :class="['input-ui', variantClass, sizeClass, { 'input-error': isError }]"
     @blur="validateInput"
     @keyup.enter="handleSubmit"
-    @input="$emit('update:modelValue', $event.target.value)"
-  >
+    @input="$emit('input', $event.target.value)"
+  />
 </template>
 
 <script>
 export default {
   name: 'InputUI',
   props: {
-    modelValue: {  
+    value: {
       type: String,
       default: ''
     },
-    label: {      
+    label: {
       type: String,
       default: ''
     },
-    placeholder: { 
+    placeholder: {
       type: String,
       default: ''
     },
     size: {
       type: String,
       default: 'm',
-      validator: value => ['s', 'm', 'l', 'xl'].includes(value)
+      validator: (value) => ['s', 'm', 'l', 'xl'].includes(value)
     },
     variant: {
       type: String,
       default: 'main',
-      validator: value => ['main', 'second'].includes(value)
+      validator: (value) => ['main', 'second'].includes(value)
     },
     type: {
       type: String,
       default: 'text',
-      validator: value => ['text', 'password', 'email', 'number', 'search'].includes(value)
+      validator: (value) => ['text', 'password', 'email', 'number', 'search'].includes(value)
     },
-    required: {    
+    required: {
       type: Boolean,
       default: false
     }
@@ -51,28 +51,35 @@ export default {
   data() {
     return {
       isError: false
-    };
+    }
   },
   computed: {
     variantClass() {
-      return `input-ui-${this.variant}-var`;
+      return `input-ui-${this.variant}-var`
     },
     sizeClass() {
-      return `input-size-${this.size}`;
+      return `input-size-${this.size}`
+    }
+  },
+  watch: {
+    value() {
+      if (this.required) {
+        this.isError = this.value.trim() === ''
+      }
     }
   },
   methods: {
     handleSubmit() {
-      this.validateInput();
+      this.validateInput()
       if (!this.isError) {
-        this.$emit('submit', this.modelValue);
+        this.$emit('submit', this.value)
       }
     },
     validateInput() {
-      this.isError = this.required && this.modelValue.trim() === '';
+      this.isError = this.required && this.value.trim() === ''
     }
   }
-};
+}
 </script>
 
 <style scoped>

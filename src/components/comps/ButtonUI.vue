@@ -1,11 +1,11 @@
 <template>
-  <button 
+  <button
     :title="label"
     :aria-label="label"
-    @click="handleClick()"
     :disabled="loading"
     :class="['button-ui', variantClass, { 'button-loading': loading }, sizeClass]"
     :type="type"
+    @click="handleClick()"
   >
     <div v-if="loading" class="loader"></div>
     <template v-else>
@@ -26,11 +26,11 @@ export default {
     size: {
       type: String,
       default: 'm',
-      validator: value => ['s', 'm', 'l', 'xl'].includes(value)
+      validator: (value) => ['s', 'm', 'l', 'xl'].includes(value)
     },
     variant: {
       type: String,
-      default: 'main-var' 
+      default: 'main-var'
     },
     loading: {
       type: Boolean,
@@ -39,25 +39,25 @@ export default {
     type: {
       type: String,
       default: 'button',
-      validator: value => ['button', 'submit', 'reset'].includes(value)
+      validator: (value) => ['button', 'submit', 'reset'].includes(value)
     }
   },
   computed: {
     variantClass() {
-      return `${this.variant}-var`;
+      return `${this.variant}-var`
     },
     sizeClass() {
-      return `input-size-${this.size}`;
+      return `input-size-${this.size}`
     }
   },
   methods: {
     handleClick() {
       if (!this.loading) {
-        this.$emit('click'); 
+        this.$emit('click')
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -70,7 +70,7 @@ export default {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px; 
+  gap: 8px;
 }
 
 .button-ui:disabled {
@@ -128,6 +128,8 @@ export default {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>
